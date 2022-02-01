@@ -8,7 +8,7 @@ using System.Net;
 
 namespace eNavvi.FormularyProcessor.Utilities
 {
-    class ExternalService
+  public  class ExternalService
     {
         const string RXNAV_BASE_REST_URL = "https://rxnav.nlm.nih.gov/REST/";
         private readonly Configurations _config;

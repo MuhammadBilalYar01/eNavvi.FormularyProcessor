@@ -19,11 +19,51 @@ namespace eNavvi.FormularyProcessor.Data
         {
         }
 
+        public virtual DbSet<DrugTier> DrugTier { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<RelatedInfo> RelatedInfo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DrugTier>(entity =>
+            {
+                entity.HasIndex(e => e.PlanId, "FK_IDX_DrugDetailHistory_PlanID_Plan_ID");
+
+                entity.HasIndex(e => e.PlanId, "FK_IDX_DrugTier_PlanID_Plan_ID");
+
+                entity.HasIndex(e => e.TierName, "idx_DrugTier_TierName");
+
+                entity.HasIndex(e => new { e.TierName, e.PlanId }, "uq_DrugTier_TierNameAndPlanId")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.LastUpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PlanId).HasColumnName("PlanID");
+
+                entity.Property(e => e.PublishDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("('2000-01-01 00:00:00.000')");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.TierName)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Plan)
+                    .WithMany(p => p.DrugTier)
+                    .HasForeignKey(d => d.PlanId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DrugTier_PlanID_Plan_ID");
+            });
+
             modelBuilder.Entity<Plan>(entity =>
             {
                 entity.HasIndex(e => e.PlanGuid, "IDX_Plan_PlanGuid")

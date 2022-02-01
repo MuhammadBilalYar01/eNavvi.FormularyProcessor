@@ -7,6 +7,11 @@ namespace eNavvi.FormularyProcessor.Entities
 {
     public partial class Plan
     {
+        public Plan()
+        {
+            DrugTier = new HashSet<DrugTier>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
@@ -25,5 +30,7 @@ namespace eNavvi.FormularyProcessor.Entities
         public int StateId { get; set; }
         public bool IsSpecial { get; set; }
         public int ValidationResult { get; set; }
+
+        public virtual ICollection<DrugTier> DrugTier { get; set; }
     }
 }
