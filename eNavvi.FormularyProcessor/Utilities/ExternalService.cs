@@ -117,7 +117,7 @@ namespace eNavvi.FormularyProcessor.Utilities
          * get the drug name from an rxcui
          * https://rxnav.nlm.nih.gov/REST/rxcui/1000001/property.json?propName=RxNorm%20Name
          */
-        internal string GetDrugNameByRxcui(string rxcui)
+        public string GetDrugNameByRxcui(string rxcui)
         {
             string drugName = null;
             string url = $"rxcui/{rxcui}/property.json?propName=RxNorm Name";
@@ -138,7 +138,7 @@ namespace eNavvi.FormularyProcessor.Utilities
          * request to get drug name from ndc number
          * https://rxnav.nlm.nih.gov/REST/ndcstatus.json?ndc=00071015723
          */
-        internal (string, string) GetDrugNameByNdc(string ndc)
+        public (string, string) GetDrugNameByNdc(string ndc)
         {
             string drugName = string.Empty;
             string rxcui = string.Empty;
@@ -167,7 +167,7 @@ namespace eNavvi.FormularyProcessor.Utilities
          * "approximate" search function RxNorm provides
          * https://rxnav.nlm.nih.gov/REST/approximateTerm.json?term=amlodipine%205%20MG%20/%20hydrochlorothiazide%2025%20MG%20/%20olmesartan%20medoxomil%2040%20MG%20Oral%20Table&maxEntries=1&option=1
          */
-        internal string GetRxcuiByDrugName(string drugName)
+        public string GetRxcuiByDrugName(string drugName)
         {
             string rxcui = string.Empty;
             string url = $"approximateTerm.json?term={drugName}&maxEntries=1&option=1";
@@ -187,7 +187,7 @@ namespace eNavvi.FormularyProcessor.Utilities
          * get the rxcui number from an ndc number
          * https://rxnav.nlm.nih.gov/REST/ndcproperties.json?id=1000001
          */
-        internal string GetRxcuiByNdc(string ndc)
+        public string GetRxcuiByNdc(string ndc)
         {
             string rxcui = string.Empty;
             string url = $"ndcproperties.json?id={ndc}";
