@@ -99,7 +99,7 @@ namespace eNavvi.FormularyProcessor.Services
                         Log.Information($"Formulary Uploaded");
 
                         Log.Information($"Uploading unprocessed Rxcui.");
-                        await this._blobStorage.MergeRxcui(this._tableStorage.GetUnProcessedExcui(plans.Select(x => x.Rxcui).ToList()).ToList());
+                        await this._blobStorage.MergeRxcui(this._tableStorage.GetUnProcessedRxcui(plans.Select(x => x.Rxcui).ToList()).ToList());
                         Log.Information($"Unprocessed Rxcui uploading completed.");
 
                         await this._blobStorage.UploadBlob(this._config.Plan_Container, item.Name, newPlan);

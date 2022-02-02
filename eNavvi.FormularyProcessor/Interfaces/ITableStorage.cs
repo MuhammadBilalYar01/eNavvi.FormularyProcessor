@@ -1,4 +1,5 @@
 ﻿using eNavvi.FormularyProcessor.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace eNavvi.FormularyProcessor.Interfaces
 {
@@ -8,6 +9,6 @@ namespace eNavvi.FormularyProcessor.Interfaces
         IEnumerable<Plan> GetAllUnImportedPlans(bool isImported = false);
         void UpdatePlanProcessed(int? planId = null, bool? isProcessed = null, int? Processed = null);
         void UpdatePlanImported(int planId, bool isImported, int imported);
-        List<string> GetUnProcessedExcui(List<string> unProcessed);
+        List<string> GetUnProcessedRxcui(List<string> unProcessed);
     }
 }

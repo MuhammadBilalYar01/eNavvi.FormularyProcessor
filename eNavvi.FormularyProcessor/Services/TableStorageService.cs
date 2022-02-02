@@ -66,7 +66,7 @@ namespace eNavvi.FormularyProcessor.Services
             return results;
         }
 
-        public List<string> GetUnProcessedExcui(List<string> unProcessed)
+        public List<string> GetUnProcessedRxcui(List<string> unProcessed)
         {
             List<string> processed = this._db.RelatedInfo.Select(x => x.Rxcui.ToString()).ToList();
 
