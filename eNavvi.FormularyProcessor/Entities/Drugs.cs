@@ -5,21 +5,18 @@ using System.Collections.Generic;
 
 namespace eNavvi.FormularyProcessor.Entities
 {
-    public partial class DrugTier
+    public partial class Drugs
     {
-        public DrugTier()
+        public Drugs()
         {
             DrugDetails = new HashSet<DrugDetails>();
         }
 
         public int Id { get; set; }
-        public string TierName { get; set; }
-        public DateTime PublishDate { get; set; }
-        public int PlanId { get; set; }
+        public string DrugName { get; set; }
         public DateTime LastUpdatedDate { get; set; }
-        public bool? Status { get; set; }
+        public int? Rxcui { get; set; }
 
-        public virtual Plan Plan { get; set; }
         public virtual ICollection<DrugDetails> DrugDetails { get; set; }
     }
 }

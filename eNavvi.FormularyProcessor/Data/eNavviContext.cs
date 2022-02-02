@@ -19,12 +19,52 @@ namespace eNavvi.FormularyProcessor.Data
         {
         }
 
+        public virtual DbSet<DrugDetails> DrugDetails { get; set; }
         public virtual DbSet<DrugTier> DrugTier { get; set; }
+        public virtual DbSet<Drugs> Drugs { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<RelatedInfo> RelatedInfo { get; set; }
+        public virtual DbSet<ValidationResult> ValidationResult { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DrugDetails>(entity =>
+            {
+                entity.HasIndex(e => e.TierId, "FK_IDX_DrugDetails_TierID_DrugTier_ID");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ExtraInfo).IsUnicode(false);
+
+                entity.Property(e => e.LastUpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Ndc).HasColumnName("NDC");
+
+                entity.Property(e => e.PublishDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("('2000-01-01 00:00:00.000')");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.TierId).HasColumnName("TierID");
+
+                entity.HasOne(d => d.Drug)
+                    .WithMany(p => p.DrugDetails)
+                    .HasForeignKey(d => d.DrugId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Drugs_In_DrugDetails");
+
+                entity.HasOne(d => d.Tier)
+                    .WithMany(p => p.DrugDetails)
+                    .HasForeignKey(d => d.TierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DrugDetails_TierID_DrugTier_ID");
+            });
+
             modelBuilder.Entity<DrugTier>(entity =>
             {
                 entity.HasIndex(e => e.PlanId, "FK_IDX_DrugDetailHistory_PlanID_Plan_ID");
@@ -62,6 +102,22 @@ namespace eNavvi.FormularyProcessor.Data
                     .HasForeignKey(d => d.PlanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DrugTier_PlanID_Plan_ID");
+            });
+
+            modelBuilder.Entity<Drugs>(entity =>
+            {
+                entity.HasIndex(e => e.Rxcui, "idx_rxcui_drugs");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.DrugName)
+                    .IsRequired()
+                    .HasMaxLength(6000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastUpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<Plan>(entity =>
@@ -149,6 +205,23 @@ namespace eNavvi.FormularyProcessor.Data
                 entity.Property(e => e.LastUpdatedDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<ValidationResult>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Comments).IsUnicode(false);
+
+                entity.Property(e => e.DrugName)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastUpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PlanId).HasColumnName("PlanID");
             });
 
             OnModelCreatingPartial(modelBuilder);
