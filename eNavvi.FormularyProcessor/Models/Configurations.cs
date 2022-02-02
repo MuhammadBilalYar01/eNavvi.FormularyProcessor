@@ -9,5 +9,7 @@
         public string Related_Container { get; set; }
         public string Medicare_Container { get; set; }
         public bool TraceEnabled { get; set; }
+        public int MAX_Import { get; set; }
+        public int MAX_Import_In_Run { get; set; }
     }
 }
