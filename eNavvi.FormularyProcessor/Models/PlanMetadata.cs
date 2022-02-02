@@ -1,10 +1,5 @@
 ﻿namespace eNavvi.FormularyProcessor.Models
 {
-    public class PlanMetaData
-    {
-        public PlanData PlanData { get; set; }
-    }
-
     public class PlanData
     {
         public string PlanName { get; set; }

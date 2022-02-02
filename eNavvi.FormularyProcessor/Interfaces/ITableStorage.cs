@@ -2,12 +2,6 @@
 
 namespace eNavvi.FormularyProcessor.Interfaces
 {
-    public class DrugsDTO
-    {
-        public string DrugName { get; set; }
-        public int? Rxcui { get; set; }
-
-    }
     public interface ITableStorage
     {
         IEnumerable<Plan> GetAllUnProcessedPlans(bool isProcessed = false);
