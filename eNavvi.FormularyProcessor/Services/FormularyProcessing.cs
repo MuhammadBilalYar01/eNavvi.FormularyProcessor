@@ -74,7 +74,6 @@ namespace eNavvi.FormularyProcessor.Services
                     JArray newPlanData = this.ParseResult(item, newPlan);
 
                     List<StandardizePlan> plans = new List<StandardizePlan>();
-                    int processed = 0;
 
                     Log.Information($"Total: {newPlanData.Count}, Skipping: {item.Processed} drugs, as its alaredy processed.");
                     if (item.IsSpecial)
@@ -96,30 +95,16 @@ namespace eNavvi.FormularyProcessor.Services
                     {
                         Log.Information($"Converting into Json format.");
 
-                        await this._blobStorage.MergeFormulary($"{item.Name}/Formulary.json", plans, ((item.Processed + processed) >= newPlanData.Count || this._isTimeOut == false));
+                        await this._blobStorage.MergeFormulary($"{item.Name}/Formulary.json", plans);
                         Log.Information($"Formulary Uploaded");
 
                         Log.Information($"Uploading unprocessed Rxcui.");
                         await this._blobStorage.MergeRxcui(this._tableStorage.GetUnProcessedExcui(plans.Select(x => x.Rxcui).ToList()).ToList());
                         Log.Information($"Unprocessed Rxcui uploading completed.");
 
-                        bool IsProcessed;
-                        int Processed;
-                        if ((item.Processed + processed) >= newPlanData.Count || this._isTimeOut == false)
-                        {
-                            await this._blobStorage.UploadBlob(this._config.Plan_Container, item.Name, newPlan);
+                        await this._blobStorage.UploadBlob(this._config.Plan_Container, item.Name, newPlan);
 
-                            IsProcessed = true;
-                            Processed = 0;
-                        }
-                        else
-                        {
-                            Log.Information($"Already Processed:{item.Processed}, Newly Processed: {processed}, Total Processed: {item.Processed + processed}");
-                            Processed = item.Processed + processed;
-                            IsProcessed = false;
-                        }
-
-                        this._tableStorage.UpdatePlanProcessed(item.Id, IsProcessed, Processed);
+                        this._tableStorage.UpdatePlanProcessed(item.Id, true, 0);
                         Log.Information($"Formulary Processing Completed.");
                     }
                 }

@@ -117,28 +117,28 @@ namespace eNavvi.FormularyProcessor.Services
             await this.UploadBlob(this._config.Related_Container, Constants.UN_ROCESSED_RXCUI, content);
         }
 
-        public async Task MergeFormulary(string blobId, List<StandardizePlan> content, bool IsProcessed)
+        public async Task MergeFormulary(string blobId, List<StandardizePlan> content)
         {
-            if (IsProcessed)
-            {
-                var data = JsonConvert.SerializeObject(content);
-                await this.UploadBlob(this._config.Formulary_Container, blobId, data);
-            }
-            else
-            {
-                string existing = await this.DownloadBlob(this._config.Formulary_Container, blobId);
-                if (existing != "[]")
-                {
-                    var existingPlan = JsonConvert.DeserializeObject<List<StandardizePlan>>(existing);
-                    log.LogInformation("Existing Formulary: " + existingPlan.Count());
-                    log.LogInformation("New Formulary: " + content.Count());
-                    var unique = existingPlan.Union(content);
-                    log.LogInformation("Total unique Formulary: " + unique.Count());
-                    content = unique.ToList();
-                }
-                var data = JsonConvert.SerializeObject(content);
-                await this.UploadBlob(this._config.Formulary_Container, blobId, data);
-            }
+            //if (IsProcessed)
+            //{
+            var data = JsonConvert.SerializeObject(content);
+            await this.UploadBlob(this._config.Formulary_Container, blobId, data);
+            //}
+            //else
+            //{
+            //    string existing = await this.DownloadBlob(this._config.Formulary_Container, blobId);
+            //    if (existing != "[]")
+            //    {
+            //        var existingPlan = JsonConvert.DeserializeObject<List<StandardizePlan>>(existing);
+            //        log.LogInformation("Existing Formulary: " + existingPlan.Count());
+            //        log.LogInformation("New Formulary: " + content.Count());
+            //        var unique = existingPlan.Union(content);
+            //        log.LogInformation("Total unique Formulary: " + unique.Count());
+            //        content = unique.ToList();
+            //    }
+            //    var data = JsonConvert.SerializeObject(content);
+            //    await this.UploadBlob(this._config.Formulary_Container, blobId, data);
+            //}
         }
 
         public List<string> ListAllBlobs(string containerId)

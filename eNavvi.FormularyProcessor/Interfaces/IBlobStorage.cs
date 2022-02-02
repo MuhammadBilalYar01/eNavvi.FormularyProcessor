@@ -6,7 +6,7 @@ namespace eNavvi.FormularyProcessor.Interfaces
     {
         public Task<string> DownloadBlob(string containerId, string blobId);
         public Task UploadBlob(string containerId, string blobId, string content);
-        public Task MergeFormulary(string blobId, List<StandardizePlan> content, bool IsProcessed);
+        public Task MergeFormulary(string blobId, List<StandardizePlan> content);
         public Task MergeRxcui(List<string> rxcuis);
         public List<string> ListAllBlobs(string containerId);
         void DeleteBlobs(string containerId, List<string> planSettings);
