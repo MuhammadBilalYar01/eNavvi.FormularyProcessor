@@ -21,7 +21,7 @@ namespace eNavvi.FormularyProcessor.Services
 
         static readonly object _object = new object();
 
-        public FormularyProcessing(IBlobStorage blobStorage, ITableStorage tableStorage, IConfigurationRoot config, IRxNormUtility rxNormUtility)
+        public FormularyProcessing(IBlobStorage blobStorage, ITableStorage tableStorage, IConfiguration config, IRxNormUtility rxNormUtility)
         {
             this._blobStorage = blobStorage;
             this._tableStorage = tableStorage;

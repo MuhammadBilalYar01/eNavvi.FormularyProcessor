@@ -10,7 +10,7 @@ using Serilog.Events;
 #endregion
 
 #region Setup
-IConfigurationRoot Configuration = new ConfigurationBuilder()
+IConfiguration Configuration = new ConfigurationBuilder()
                        .SetBasePath(Directory.GetCurrentDirectory())
                        .AddJsonFile("appsettings.json")
                        .Build();

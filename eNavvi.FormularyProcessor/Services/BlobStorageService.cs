@@ -15,7 +15,7 @@ namespace eNavvi.FormularyProcessor.Services
         private readonly Configurations _config;
         private readonly ILogger<BlobStorageService> log;
 
-        public BlobStorageService(IConfigurationRoot config, ILogger<BlobStorageService> log)
+        public BlobStorageService(IConfiguration config, ILogger<BlobStorageService> log)
         {
             Configurations option = new Configurations();
             config.Bind(option);
