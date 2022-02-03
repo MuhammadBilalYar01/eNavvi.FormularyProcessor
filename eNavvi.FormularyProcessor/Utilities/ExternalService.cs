@@ -1,4 +1,5 @@
-﻿using eNavvi.FormularyProcessor.Models;
+﻿using eNavvi.FormularyProcessor.Entities;
+using eNavvi.FormularyProcessor.Models;
 
 using Newtonsoft.Json.Linq;
 
@@ -8,7 +9,7 @@ using System.Net;
 
 namespace eNavvi.FormularyProcessor.Utilities
 {
-  public  class ExternalService
+    public class ExternalService
     {
         const string RXNAV_BASE_REST_URL = "https://rxnav.nlm.nih.gov/REST/";
         private readonly Configurations _config;
@@ -17,10 +18,12 @@ namespace eNavvi.FormularyProcessor.Utilities
             this._config = config;
         }
 
-        public RelatedInformation GetRelatedInfo(string rxcui)
+        public RelatedInfo GetRelatedInfo(string rxcui)
         {
-            RelatedInformation data = this.RxNavGetRelatedConcept(rxcui);
-            data.DrugClasses = this.RxATCClassFromRxcuiLookupBestEffort(rxcui);
+            RelatedInfo data = this.RxNavGetRelatedConcept(rxcui);
+            var classes = this.RxATCClassFromRxcuiLookupBestEffort(rxcui);
+            if (null != classes)
+                data.DrugClasses = string.Join(";", classes.OrderBy(x => x));
             return data;
         }
 
@@ -49,35 +52,35 @@ namespace eNavvi.FormularyProcessor.Utilities
             return null;
         }
 
-        private RelatedInformation RxNavGetRelatedConcept(string rxcui)
+        private RelatedInfo RxNavGetRelatedConcept(string rxcui)
         {
             string content = string.Empty;
-            RelatedInformation info = new RelatedInformation { Rxcui = rxcui };
+            RelatedInfo info = new RelatedInfo { Rxcui = int.Parse(rxcui) };
             try
             {
-                string url = $"rxcui/{rxcui}/related.json?tty=BN+IN+DFG";
+                string url = $"{RXNAV_BASE_REST_URL}rxcui/{rxcui}/related.json?tty=BN+IN+DFG";
                 content = MakeHttpRequest(url);
                 JObject result = JObject.Parse(content);
-                var xz = result["relatedGroup"]["conceptGroup"].Where(x => x["tty"].Equals("IN"));
+
                 if ((string)result["relatedGroup"]["conceptGroup"][0]["tty"] == "BN")
                 {
                     JArray props = (JArray)result["relatedGroup"]["conceptGroup"][0]["conceptProperties"];
                     if (props != null)
-                        info.BrandNames = props.Select(x => x["name"].ToString()).Distinct().ToList();
+                        info.BrandName = string.Join(";", props.Select(x => x["name"].ToString()).Distinct().ToList().OrderBy(x => x));
                 }
 
                 if ((string)result["relatedGroup"]["conceptGroup"][1]["tty"] == "IN")
                 {
                     JArray props = (JArray)result["relatedGroup"]["conceptGroup"][1]["conceptProperties"];
                     if (props != null)
-                        info.Ingredients = props.Select(x => x["name"].ToString()).Distinct().ToList();
+                        info.Ingredients = string.Join(";", props.Select(x => x["name"].ToString()).Distinct().ToList().OrderBy(x => x));
                 }
 
                 if ((string)result["relatedGroup"]["conceptGroup"][2]["tty"] == "DFG")
                 {
                     JArray props = (JArray)result["relatedGroup"]["conceptGroup"][2]["conceptProperties"];
                     if (props != null)
-                        info.DosageGroup = props.Select(x => x["name"].ToString()).Distinct().ToList();
+                        info.DosageFromGroup = string.Join(";", props.Select(x => x["name"].ToString()).Distinct().ToList().OrderBy(x => x));
                 }
             }
             catch (Exception ex)
