@@ -15,5 +15,7 @@ namespace eNavvi.FormularyProcessor.Models
         Medicaid = 2,
         [Description("Medicare")]
         Medicare = 3,
+        [Description("Marketplace")]
+        Marketplace = 4,
     }
 }
