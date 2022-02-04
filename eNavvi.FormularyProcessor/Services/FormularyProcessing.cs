@@ -31,13 +31,18 @@ namespace eNavvi.FormularyProcessor.Services
             this._rxNormUtility = rxNormUtility;
         }
 
-        public async Task Run()
+        public async Task Run(int? planId = null)
         {
             Log.Information($"FormularyProcessing executed at: {DateTime.Now}");
             DateTime start = DateTime.Now;
             Log.Logger = Log.ForContext("RunID", Guid.NewGuid());
 
-            List<Plan> allPlan = this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0).ToList();
+            List<Plan> allPlan = new List<Plan>();
+            if (planId.HasValue)
+                this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0 & x.Id == planId).ToList();
+            else
+                allPlan = this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0).ToList();
+
             if (allPlan.Count == 0)
             {
                 Log.Information("No plan for processing");
