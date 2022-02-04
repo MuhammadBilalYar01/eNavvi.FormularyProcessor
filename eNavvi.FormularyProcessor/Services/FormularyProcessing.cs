@@ -39,7 +39,7 @@ namespace eNavvi.FormularyProcessor.Services
 
             List<Plan> allPlan = new List<Plan>();
             if (planId.HasValue)
-                this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0 & x.Id == planId).ToList();
+                allPlan = this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0 & x.Id == planId).ToList();
             else
                 allPlan = this._tableStorage.GetAllUnProcessedPlans().Where(x => x.Processed == 0).ToList();
 
