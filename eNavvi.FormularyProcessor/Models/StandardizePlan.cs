@@ -11,5 +11,6 @@
         //public string TierHigh { get; set; }
         public string TierLow { get; set; }
         public string Extra { get; set; }
+        public string Price { get; set; }
     }
 }

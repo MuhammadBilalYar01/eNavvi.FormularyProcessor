@@ -271,7 +271,8 @@ namespace eNavvi.FormularyProcessor.Services
                              StepTherapy = x["plans"][0]["step_therapy"] != null && x["plans"][0]["step_therapy"].ToString() != "" ? (bool)x["plans"][0]["step_therapy"] : false,
                              PriorAuthorization = x["plans"][0]["prior_authorization"] != null && x["plans"][0]["prior_authorization"].ToString() != "" ? (bool)x["plans"][0]["prior_authorization"] : false,
                              TierLow = x["plans"][0]["drug_tier"].ToString(),
-                             Extra = x["plans"][0]["extraInfo"] != null ? x["plans"][0]["extraInfo"].ToString() : null
+                             Extra = x["plans"][0]["extraInfo"] != null ? x["plans"][0]["extraInfo"].ToString() : null,
+                             Price = x["price"]?.ToString()
                          }).ToList();
             var emptyPlan = plans.Where(x => string.IsNullOrEmpty(x.DrugName)).ToList();
             if (emptyPlan.Count > 0)
