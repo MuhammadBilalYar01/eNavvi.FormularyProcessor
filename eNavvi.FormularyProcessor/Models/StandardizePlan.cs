@@ -12,5 +12,6 @@
         public string TierLow { get; set; }
         public string Extra { get; set; }
         public string Price { get; set; }
+        public bool IsValid { get; set; } = true;
     }
 }

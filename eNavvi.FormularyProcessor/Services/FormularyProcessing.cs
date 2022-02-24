@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using eNavvi.FormularyProcessor.Entities;
 using eNavvi.FormularyProcessor.Models.RxNorm;
+using System.Threading.Tasks;
 
 namespace eNavvi.FormularyProcessor.Services
 {
@@ -66,8 +67,12 @@ namespace eNavvi.FormularyProcessor.Services
                         break;
                     }
                     Log.Information($"processing plan: {item.Name}");
-                    string previousPlan = await this._blobStorage.DownloadBlob(this._config.Plan_Container, item.Name);
-
+                    string previousPlan = String.Empty;
+#if DEBUG  
+                    previousPlan = String.Empty;
+#else
+                    await this._blobStorage.DownloadBlob(this._config.Plan_Container, item.Name);
+#endif
                     string newPlan = this._service.MakeHttpRequest(item.Url);//File.ReadAllText(@"C:\Users\Muhammad Bilal\Desktop\AZ_Medicaid.json");// 
                     if (previousPlan == newPlan && item.Processed == 0)
                     {
@@ -238,18 +243,19 @@ namespace eNavvi.FormularyProcessor.Services
 
             Parallel.ForEach(ppp.Where(x => x.Rxcui == "0" || x.Rxcui == null).ToList(), x =>
             {
-                var xx = this._service.GetRxcuiByDrugName(x.DrugName);
+                //var xx = this._service.GetRxcuiByDrugName(x.DrugName);
                 lock (_object)
                 {
-                    if (!string.IsNullOrEmpty(xx))
-                    {
-                        x.Rxcui = xx;
-                    }
-                    else
-                        x.Rxcui = null;
+                    //if (!string.IsNullOrEmpty(xx))
+                    //{
+                    //    x.Rxcui = xx;
+                    //}
+                    //else
+                    //    x.Rxcui = null;
+
+                    x.IsValid = false;
                 }
             });
-
             return ppp;
         }
 
