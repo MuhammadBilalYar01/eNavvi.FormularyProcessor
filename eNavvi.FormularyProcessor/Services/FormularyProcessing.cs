@@ -181,7 +181,8 @@ namespace eNavvi.FormularyProcessor.Services
                                 StepTherapy = item1.FirstOrDefault().StepTherapy,
                                 PriorAuthorization = item1.FirstOrDefault().PriorAuthorization,
                                 TierLow = item1.FirstOrDefault().TierLow,
-                                Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray())
+                                Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray()),
+                                UpdatedMethod = LastUpdatedMethod.Lookup,
                             };
                             if (!ppp.Any(x => x.DrugName == item1.Key))
                                 ppp.Add(p);
@@ -198,7 +199,8 @@ namespace eNavvi.FormularyProcessor.Services
                                 StepTherapy = item1.FirstOrDefault().StepTherapy,
                                 PriorAuthorization = item1.FirstOrDefault().PriorAuthorization,
                                 TierLow = item1.FirstOrDefault().TierLow,
-                                Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray())
+                                Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray()),
+                                UpdatedMethod = LastUpdatedMethod.Lookup,
                             };
                             if (!ppp.Any(x => x.DrugName == item1.Key))
                                 ppp.Add(p);
@@ -216,7 +218,8 @@ namespace eNavvi.FormularyProcessor.Services
                             StepTherapy = item1.FirstOrDefault().StepTherapy,
                             PriorAuthorization = item1.FirstOrDefault().PriorAuthorization,
                             TierLow = item1.FirstOrDefault().TierLow,
-                            Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray())
+                            Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray()),
+                            UpdatedMethod = LastUpdatedMethod.Lookup,
                         };
                         if (!ppp.Any(x => x.DrugName == item1.Key))
                             ppp.Add(p);
@@ -233,7 +236,8 @@ namespace eNavvi.FormularyProcessor.Services
                         StepTherapy = item1.FirstOrDefault().StepTherapy,
                         PriorAuthorization = item1.FirstOrDefault().PriorAuthorization,
                         TierLow = item1.FirstOrDefault().TierLow,
-                        Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray())
+                        Extra = string.Join(",", item1.Select(x => x.Extra).Where(x => !string.IsNullOrEmpty(x)).ToArray()),
+                        UpdatedMethod = LastUpdatedMethod.Lookup,
                     };
 
                     if (!ppp.Any(x => x.DrugName == item1.Key))
@@ -278,7 +282,8 @@ namespace eNavvi.FormularyProcessor.Services
                              PriorAuthorization = x["plans"][0]["prior_authorization"] != null && x["plans"][0]["prior_authorization"].ToString() != "" ? (bool)x["plans"][0]["prior_authorization"] : false,
                              TierLow = x["plans"][0]["drug_tier"].ToString(),
                              Extra = x["plans"][0]["extraInfo"] != null ? x["plans"][0]["extraInfo"].ToString() : null,
-                             Price = x["price"]?.ToString()
+                             Price = x["price"]?.ToString(),
+                             UpdatedMethod = LastUpdatedMethod.Ingestion,
                          }).ToList();
             var emptyPlan = plans.Where(x => string.IsNullOrEmpty(x.DrugName)).ToList();
             if (emptyPlan.Count > 0)
@@ -304,7 +309,7 @@ namespace eNavvi.FormularyProcessor.Services
                     //standardizePlan.TierHigh = plan["drug_tier"].ToString();
                     standardizePlan.TierLow = plan["drug_tier"].ToString();
                     standardizePlan.Extra = plan["extra"] != null ? plan["extra"].ToString() : null;
-
+                    
                     int count = plans.Where(x => x.DrugName.Trim().ToLower() == standardizePlan.DrugName.Trim().ToLower() && x.Rxcui.Trim().ToLower() == standardizePlan.Rxcui.Trim().ToLower()).Count();
                     if (count == 0)
                         plans.Add(standardizePlan);
@@ -323,6 +328,7 @@ namespace eNavvi.FormularyProcessor.Services
                         string drugName = _service.GetDrugNameByRxcui(drug.Rxcui);
                         if (!string.IsNullOrEmpty(drugName) && drugName.Trim().ToLower() == drug.DrugName.Trim().ToLower())
                         {
+                            drug.UpdatedMethod = LastUpdatedMethod.Lookup;
                             uniquePlan.Add(drug);
                             matched = true;
                             break;
@@ -335,6 +341,7 @@ namespace eNavvi.FormularyProcessor.Services
                             string rxcui = _service.GetRxcuiByDrugName(drug.DrugName);
                             if (!string.IsNullOrEmpty(rxcui) && rxcui.Trim().ToLower() == drug.Rxcui.Trim().ToLower())
                             {
+                                drug.UpdatedMethod = LastUpdatedMethod.Lookup;
                                 uniquePlan.Add(drug);
                                 matched = true;
                                 break;
@@ -426,21 +433,24 @@ namespace eNavvi.FormularyProcessor.Services
             string drugName = null != plan["drug_name"] ? plan["drug_name"].ToString() : string.Empty;
             string rxcui = (null != plan["rxnorm_id"] && plan["rxnorm_id"].ToString() != "NaN") ? plan["rxnorm_id"].ToString() : string.Empty;
             string ndc = null != plan["ndc"] ? plan["ndc"].ToString() : null != plan["NDC_FORMAT_CODE"] ? plan["NDC_FORMAT_CODE"].ToString() : String.Empty;
-
+            LastUpdatedMethod updatedMethod = LastUpdatedMethod.Ingestion;
             // Case 1: Drug Name available but rxcui is missing
             if (!string.IsNullOrEmpty(drugName) && string.IsNullOrEmpty(rxcui))
             {
                 var newDrugName = drugName.Replace("[", "").Replace("]", "");
+                updatedMethod = LastUpdatedMethod.Lookup;
                 rxcui = this._service.GetRxcuiByDrugName(newDrugName);
             }
             // Case 2: Rxcui is available but Drug Name is missing
             else if (!string.IsNullOrEmpty(rxcui) && string.IsNullOrEmpty(drugName))
             {
+                updatedMethod = LastUpdatedMethod.Lookup;
                 drugName = this._service.GetDrugNameByRxcui(rxcui);
             }
             // Case 3: Ndc is avaible but Drug Name is missing
             if (!string.IsNullOrEmpty(ndc) && string.IsNullOrEmpty(drugName))
             {
+                updatedMethod = LastUpdatedMethod.Lookup;
                 (string drugName, string rxcui) result = this._service.GetDrugNameByNdc(ndc);
                 drugName = result.drugName;
                 if (string.IsNullOrEmpty(rxcui))
@@ -449,6 +459,7 @@ namespace eNavvi.FormularyProcessor.Services
             // Case 3.1: Ndc is avaible but rxcui is missing
             if (!string.IsNullOrEmpty(ndc) && string.IsNullOrEmpty(rxcui))
             {
+                updatedMethod = LastUpdatedMethod.Lookup;
                 rxcui = this._service.GetRxcuiByNdc(ndc);
             }
 
@@ -458,7 +469,7 @@ namespace eNavvi.FormularyProcessor.Services
             if (string.IsNullOrEmpty(rxcui))
                 return null;
 
-            return new StandardizePlan { DrugName = drugName, Rxcui = rxcui, Ndc = ndc };
+            return new StandardizePlan { DrugName = drugName, Rxcui = rxcui, Ndc = ndc,UpdatedMethod= updatedMethod };
         }
         #endregion
     }

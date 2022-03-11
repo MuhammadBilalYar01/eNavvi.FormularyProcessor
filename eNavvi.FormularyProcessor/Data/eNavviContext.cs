@@ -42,6 +42,10 @@ namespace eNavvi.FormularyProcessor.Data
 
                 entity.Property(e => e.Ndc).HasColumnName("NDC");
 
+                entity.Property(e => e.Price)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PublishDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("('2000-01-01 00:00:00.000')");
@@ -131,6 +135,10 @@ namespace eNavvi.FormularyProcessor.Data
                 entity.HasIndex(e => e.StateId, "nci_wi_Plan_012781746C563862B5AD557183BFAAB2");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BaseFormularyLink)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Country)
                     .IsRequired()

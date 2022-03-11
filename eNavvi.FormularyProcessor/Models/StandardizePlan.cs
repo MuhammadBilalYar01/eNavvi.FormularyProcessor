@@ -13,5 +13,6 @@
         public string Extra { get; set; }
         public string Price { get; set; }
         public bool IsValid { get; set; } = true;
+        public LastUpdatedMethod UpdatedMethod { get; set; }
     }
 }

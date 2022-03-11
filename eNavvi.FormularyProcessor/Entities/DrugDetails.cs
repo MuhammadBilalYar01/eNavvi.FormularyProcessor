@@ -19,6 +19,7 @@ namespace eNavvi.FormularyProcessor.Entities
         public string ExtraInfo { get; set; }
         public bool? Status { get; set; }
         public int? DrugId { get; set; }
+        public string Price { get; set; }
 
         public virtual Drugs Drug { get; set; }
         public virtual DrugTier Tier { get; set; }

@@ -18,4 +18,16 @@ namespace eNavvi.FormularyProcessor.Models
         [Description("Marketplace")]
         Marketplace = 4,
     }
+
+    public enum LastUpdatedMethod
+    {
+        [Description("Default")]
+        Default = 0,
+        [Description("Lookup")]
+        Lookup = 1,
+        [Description("Ingestion")]
+        Ingestion = 2,
+        [Description("Manual")]
+        Manual = 3,
+    }
 }

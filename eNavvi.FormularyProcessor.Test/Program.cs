@@ -73,7 +73,7 @@ if (Configuration["ProcessingWorkflow"] == "1")
          Configuration,
          serviceProvider.GetService<IRxNormUtility>());
 
-    await formulary.Run();
+    await formulary.Run(10);
 }
 else
 {
