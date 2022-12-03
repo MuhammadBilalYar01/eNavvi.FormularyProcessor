@@ -11,5 +11,6 @@
         public bool TraceEnabled { get; set; }
         public int MAX_Import { get; set; }
         public int MAX_Import_In_Run { get; set; }
+        public int MaxNotificationCount { get; set; }
     }
 }
