@@ -26,7 +26,7 @@ namespace eNavvi.MedicareProcessor.Service
             Console.WriteLine("Drugs without price: " + missingprice);
 
             Directory.CreateDirectory("Formularies");
-
+            Console.WriteLine("Total Plan: " + plans.Count);
             Parallel.ForEach(plans, item =>
             {
                 Console.WriteLine(item.PlanName);
@@ -43,9 +43,9 @@ namespace eNavvi.MedicareProcessor.Service
                     Price = x.Price,
                     UpdatedMethod = LastUpdatedMethod.Ingestion
                 }).ToList();
-                Directory.CreateDirectory("Formularies/" + item.PlanName.Replace(":", ""));
+                Directory.CreateDirectory("Formularies/" + item.PlanName.Replace(":", "").Replace("*",""));
                 lock (_object)
-                    File.WriteAllText($"Formularies/{item.PlanName.Replace(":", "")}/Formulary.json", JsonConvert.SerializeObject(data));
+                    File.WriteAllText($"Formularies/{item.PlanName.Replace(":", "").Replace("*", "")}/Formulary.json", JsonConvert.SerializeObject(data));
             });
         }
     }

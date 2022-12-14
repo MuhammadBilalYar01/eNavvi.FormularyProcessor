@@ -20,7 +20,7 @@ namespace eNavvi.MedicareProcessor
             drugService.Execute(plans);
 
             t.Stop();
-            Console.WriteLine("Total time comsumed: " + t.Elapsed.Seconds);
+            Console.WriteLine("Total time comsumed: " + t.Elapsed.TotalSeconds);
             Console.ReadKey();
         }
     }

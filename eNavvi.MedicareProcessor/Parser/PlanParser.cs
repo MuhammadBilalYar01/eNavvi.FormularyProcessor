@@ -65,7 +65,7 @@
 
             // rename plan name under same id for differnt state
             var plan = new List<PlanDTO>();
-            foreach (var item in tempPlans.GroupBy(x => new { x.FullId }))
+            foreach (var item in tempPlans.GroupBy(x => new { x.PlanName }))
             {
                 if (item.Count() == 1)
                     plan.Add(item.First());
