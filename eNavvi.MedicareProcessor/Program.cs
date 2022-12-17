@@ -1,4 +1,5 @@
-﻿using eNavvi.MedicareProcessor.Service;
+﻿using eNavvi.MedicareProcessor.Parser;
+using eNavvi.MedicareProcessor.Service;
 using System.Diagnostics;
 
 namespace eNavvi.MedicareProcessor
@@ -12,12 +13,17 @@ namespace eNavvi.MedicareProcessor
 
             Stopwatch t = new Stopwatch();
             t.Start();
-
+            Console.WriteLine("=> Loading Plans");
             PlanService service = new PlanService();
             var plans = service.Execute();
 
-            DrugService drugService= new DrugService();
+            Console.WriteLine("=> Loading Drugs");
+            DrugService drugService = new DrugService();
             drugService.Execute(plans);
+
+            Console.WriteLine("=> Loading Benefit");
+            BenefitService benefit= new BenefitService();
+            benefit.Execute(plans);
 
             t.Stop();
             Console.WriteLine("Total time comsumed: " + t.Elapsed.TotalSeconds);
