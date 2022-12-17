@@ -34,7 +34,7 @@
             var tempPlans = (from fields in lines.Skip(1).Select(x => x.Split(PLANINFO_DELIMITER))
                              select new PlanDTO(fields[0], fields[1], fields[2])
                              {
-                                 State = StateParser.Parse(fields[11]),
+                                 State = string.IsNullOrWhiteSpace(fields[11]) ? "*" : fields[11],
                                  PlanName = fields[4],
                                  FormId = fields[5],
                                  CountyCode = string.IsNullOrWhiteSpace(fields[12]) ? "*" : fields[12],
