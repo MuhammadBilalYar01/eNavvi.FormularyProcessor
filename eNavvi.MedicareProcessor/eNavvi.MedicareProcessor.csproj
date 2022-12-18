@@ -15,4 +15,22 @@
     <ProjectReference Include="..\eNavvi.FormularyProcessor\eNavvi.FormularyProcessor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Sources\beneficiarycost.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sources\formularyinformation.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sources\geoinformation.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sources\planinformation.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sources\RXNCONSO-New.RRF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
