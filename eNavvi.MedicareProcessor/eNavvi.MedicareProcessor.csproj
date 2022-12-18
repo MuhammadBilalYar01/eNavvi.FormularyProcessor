@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\eNavvi.FormularyProcessor\eNavvi.FormularyProcessor.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Sources\beneficiarycost.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,4 @@
-﻿using eNavvi.FormularyProcessor.Models;
+﻿using eNavvi.MedicareProcessor.Models;
 using eNavvi.MedicareProcessor.Parser;
 using Newtonsoft.Json;
 
@@ -41,7 +41,7 @@ namespace eNavvi.MedicareProcessor.Service
                     TierLow = x.Tier,
                     Extra = x.extraInfo,
                     Price = x.Price,
-                    UpdatedMethod = LastUpdatedMethod.Ingestion
+                    UpdatedMethod = 2
                 }).ToList();
                 Directory.CreateDirectory("Formularies/" + item.PlanName.Replace(":", "").Replace("*",""));
                 lock (_object)

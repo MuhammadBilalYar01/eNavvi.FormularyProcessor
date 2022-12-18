@@ -1,7 +1,5 @@
 ﻿using eNavvi.MedicareProcessor.Models;
-using eNavvi.MedicareProcessor.Parser;
 using eNavvi.MedicareProcessor.Service;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
