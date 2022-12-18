@@ -32,7 +32,6 @@ namespace eNavvi.MedicareProcessor
 
             t.Stop();
             Console.WriteLine("Total time comsumed: " + t.Elapsed.TotalSeconds);
-            Console.ReadKey();
         }
     }
 }
