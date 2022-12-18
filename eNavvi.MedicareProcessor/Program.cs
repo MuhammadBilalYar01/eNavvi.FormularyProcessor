@@ -1,16 +1,23 @@
-﻿using eNavvi.MedicareProcessor.Parser;
+﻿using eNavvi.MedicareProcessor.Models;
+using eNavvi.MedicareProcessor.Parser;
 using eNavvi.MedicareProcessor.Service;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace eNavvi.MedicareProcessor
 {
     public class Program
     {
-        public static readonly string PublishDate = "16 Nov 2022";
+        public static readonly Configurations config;
         static readonly object _object = new object();
+        static Program()
+        {
+            string data = File.ReadAllText("appsettings.json");
+            config = JsonConvert.DeserializeObject<Configurations>(data);
+        }
         static void Main(string[] args)
         {
-
             Stopwatch t = new Stopwatch();
             t.Start();
             Console.WriteLine("=> Loading Plans");
@@ -22,7 +29,7 @@ namespace eNavvi.MedicareProcessor
             drugService.Execute(plans);
 
             Console.WriteLine("=> Loading Benefit");
-            BenefitService benefit= new BenefitService();
+            BenefitService benefit = new BenefitService();
             benefit.Execute(plans);
 
             t.Stop();

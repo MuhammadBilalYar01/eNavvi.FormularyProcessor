@@ -23,11 +23,12 @@
     }
     internal class DrugParser
     {
-        static string Path = "D:\\enavvi\\Medicare\\DataProcessing\\formularyinformation.txt";
+        static readonly string Path;
         private static Dictionary<string, string> drugName;
 
         static DrugParser()
         {
+            Path = $"Sources/{Program.config.Sourcess.Drug}";
             drugName = DrugNameParser.Parse();
             Console.WriteLine("Loaded Drug Names");
         }

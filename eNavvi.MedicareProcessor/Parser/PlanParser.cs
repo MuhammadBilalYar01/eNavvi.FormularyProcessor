@@ -20,18 +20,18 @@
     }
     internal class PlanParser
     {
-        static string Path = "D:\\enavvi\\Medicare\\DataProcessing\\planinformation.txt";
-        static string PLANINFO_DELIMITER = "|";
+        static readonly string Path;
         private static List<CountyDTO> _counties;
 
         static PlanParser()
         {
+            Path = $"Sources/{Program.config.Sourcess.Plan}";
             _counties = CountyParser.Parse();
         }
         public static List<PlanDTO> Parse()
         {
             var lines = File.ReadAllLines(Path);
-            var tempPlans = (from fields in lines.Skip(1).Select(x => x.Split(PLANINFO_DELIMITER))
+            var tempPlans = (from fields in lines.Skip(1).Select(x => x.Split("|"))
                              select new PlanDTO(fields[0], fields[1], fields[2])
                              {
                                  State = string.IsNullOrWhiteSpace(fields[11]) ? "*" : fields[11],

@@ -7,17 +7,14 @@
     }
     internal class DrugNameParser
     {
-        static string Path = "D:\\enavvi\\rxnorm-raw-data\\RXNCONSO-New.RRF";
-        public static Dictionary<string, string> Parse(string path = "")
-
+        static readonly string Path;
+        static DrugNameParser()
         {
-            string filePath;
-            if (string.IsNullOrEmpty(path))
-                filePath = Path;
-            else
-                filePath = path;
-
-            var lines = File.ReadAllLines(filePath);
+            Path = $"Sources/{Program.config.Sourcess.DrugName}";
+        }
+        public static Dictionary<string, string> Parse()
+        {
+            var lines = File.ReadAllLines(Path);
             
             var drugName = (from x in lines.Select(x => x.Split("|"))
                             select new DrugNameDTO

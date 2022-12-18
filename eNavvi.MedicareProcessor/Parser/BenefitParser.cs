@@ -1,9 +1,4 @@
 ﻿using eNavvi.FormularyProcessor.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eNavvi.MedicareProcessor.Parser
 {
@@ -23,7 +18,11 @@ namespace eNavvi.MedicareProcessor.Parser
     }
     internal class BenefitParser
     {
-        static string Path = "D:\\enavvi\\Medicare/DataProcessing\\beneficiarycost.txt";
+        static readonly string Path;
+        static BenefitParser()
+        {
+            Path = $"Sources/{Program.config.Sourcess.Benefit}";
+        }
         public static List<CoPayAmountMetadata> Parse()
         {
             var lines = File.ReadAllLines(Path);

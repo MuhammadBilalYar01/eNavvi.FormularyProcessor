@@ -1,10 +1,5 @@
 ﻿using eNavvi.MedicareProcessor.Parser;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eNavvi.MedicareProcessor.Service
 {
@@ -52,7 +47,7 @@ namespace eNavvi.MedicareProcessor.Service
 
                 name = string.IsNullOrEmpty(name) ? "" : name.Replace("'", "''");
                 string prefPhases = JsonConvert.SerializeObject(item.Prefphases);
-                string query = string.Format(this._insert, item.Inw, prefPhases, item.Tier, name, item.Inw, "Not Covered", "", prefPhases, item.Tier, name, Program.PublishDate);
+                string query = string.Format(this._insert, item.Inw, prefPhases, item.Tier, name, item.Inw, "Not Covered", "", prefPhases, item.Tier, name, Program.config.PublishDate);
                 sql.Add(query);
             }
             if (!Directory.Exists("SQL"))

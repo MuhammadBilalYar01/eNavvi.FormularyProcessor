@@ -7,7 +7,11 @@
     }
     internal class CountyParser
     {
-        static string Path = "D:\\enavvi\\Medicare\\DataProcessing\\geoinformation.txt";
+        static readonly string Path ;
+        static CountyParser()
+        {
+            Path = $"Sources/{Program.config.Sourcess.County}";
+        }
         public static List<CountyDTO> Parse()
         {
             var lines = File.ReadAllLines(Path);

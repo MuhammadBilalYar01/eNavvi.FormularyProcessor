@@ -38,7 +38,7 @@ namespace eNavvi.MedicareProcessor.Service
             {
                 string name = plan.PlanName.Replace("'", "''");
                 string county = plan.CountyCode.Replace("'", "''");
-                string query = string.Format(_planInsert, name, plan.State, name, plan.State, county, 3, plan.FullId, Guid.NewGuid(), Program.PublishDate);
+                string query = string.Format(_planInsert, name, plan.State, name, plan.State, county, 3, plan.FullId, Guid.NewGuid(), Program.config.PublishDate);
                 sql.Add(query);
             }
             Directory.CreateDirectory("SQL");
