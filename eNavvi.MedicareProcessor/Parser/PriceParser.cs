@@ -5,7 +5,11 @@
         static readonly string Path;
         static PriceParser()
         {
+#if DEBUG
+            Path = $"D:/enavvi/Medicare/DataProcessing/{Program.config.Sourcess.Price}";
+#else
             Path = $"Sources/{Program.config.Sourcess.Price}";
+#endif
         }
         public static Dictionary<string, string> Parse()
         {

@@ -43,10 +43,16 @@ namespace eNavvi.MedicareProcessor.Service
                     Price = x.Price,
                     UpdatedMethod = 2
                 }).ToList();
-                Directory.CreateDirectory("Formularies/" + item.PlanName.Replace(":", "").Replace("*",""));
+                item.Processed = data.Count;
+                Directory.CreateDirectory("Formularies/" + item.PlanName.Replace(":", "").Replace("*", ""));
                 lock (_object)
                     File.WriteAllText($"Formularies/{item.PlanName.Replace(":", "").Replace("*", "")}/Formulary.json", JsonConvert.SerializeObject(data));
             });
+            foreach (var item in plans.GroupBy(x => x.Processed))
+            {
+                Console.WriteLine($"{item.Key}=>{item.Count()}");
+            }
+            Console.WriteLine("Drug Processing completed");
         }
     }
 }

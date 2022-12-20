@@ -12,6 +12,7 @@
         public string FormId { get; set; }
         public string PlanName { get; set; }
         public string CountyCode { get; set; }
+        public int Processed { get; set; }
 
         public PlanDTO(string countyCode)
         {

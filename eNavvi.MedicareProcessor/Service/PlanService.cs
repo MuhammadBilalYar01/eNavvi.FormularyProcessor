@@ -19,7 +19,8 @@ namespace eNavvi.MedicareProcessor.Service
                                             [BlobName] [varchar](max) NOT NULL,
                                             [PublishDate] [datetime] NOT NULL,
                                             [PlanGuid] [char](36) NOT NULL,
-                                            [StateId] INT NULL)
+                                            [StateId] INT NULL,
+                                            [Processed] INT NULL)
                                     END
                                 GO
 
@@ -27,18 +28,18 @@ namespace eNavvi.MedicareProcessor.Service
 
                                 GO";
             this._planInsert = @"IF NOT EXISTS (SELECT 1 FROM [MedicareNewPlans] WHERE [Name] = '{0}' AND [State] = '{1}')
-                                    INSERT INTO [dbo].[MedicareNewPlans] ([Name] , [State], [County] , [Type] ,[BlobName] ,[PlanGuid] , [PublishDate] ) VALUES ('{2}','{3}','{4}','{5}','{6}','{7}','{8}');";
+                                    INSERT INTO [dbo].[MedicareNewPlans] ([Name] , [State], [County] , [Type] ,[BlobName] ,[PlanGuid] , [PublishDate], [Processed] ) VALUES ('{2}','{3}','{4}','{5}','{6}','{7}','{8}',{9});";
         }
-        public List<PlanDTO> Execute()
+        public List<PlanDTO> Execute(List<PlanDTO> plans)
         {
-            List<PlanDTO> plans = PlanParser.Parse();
+
             List<string> sql = new List<string>();
             sql.Add(this._planExist);
             foreach (PlanDTO plan in plans)
             {
                 string name = plan.PlanName.Replace("'", "''");
                 string county = plan.CountyCode.Replace("'", "''");
-                string query = string.Format(_planInsert, name, plan.State, name, plan.State, county, 3, plan.FullId, Guid.NewGuid(), Program.config.PublishDate);
+                string query = string.Format(_planInsert, name, plan.State, name, plan.State, county, 3, plan.FullId, Guid.NewGuid(), Program.config.PublishDate, plan.Processed);
                 sql.Add(query);
             }
             Directory.CreateDirectory("SQL");

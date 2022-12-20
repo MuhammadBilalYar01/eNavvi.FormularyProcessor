@@ -1,4 +1,5 @@
 ﻿using eNavvi.MedicareProcessor.Models;
+using eNavvi.MedicareProcessor.Parser;
 using eNavvi.MedicareProcessor.Service;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -19,12 +20,15 @@ namespace eNavvi.MedicareProcessor
             Stopwatch t = new Stopwatch();
             t.Start();
             Console.WriteLine("=> Loading Plans");
-            PlanService service = new PlanService();
-            var plans = service.Execute();
+            List<PlanDTO> plans = PlanParser.Parse();
 
             Console.WriteLine("=> Loading Drugs");
             DrugService drugService = new DrugService();
             drugService.Execute(plans);
+
+            Console.WriteLine("Writing plans");
+            PlanService service = new PlanService();
+            service.Execute(plans);
 
             Console.WriteLine("=> Loading Benefit");
             BenefitService benefit = new BenefitService();
