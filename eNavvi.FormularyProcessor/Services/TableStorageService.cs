@@ -6,7 +6,7 @@ namespace eNavvi.FormularyProcessor.Services
 {
    public class TableStorageService : ITableStorage
     {
-        private readonly eNavviContext _db;
+        public readonly eNavviContext _db;
         public TableStorageService(eNavviContext context)
         {
             this._db = context;
